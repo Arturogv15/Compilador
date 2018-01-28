@@ -27,7 +27,7 @@ _IF_ = 19
 _WHILE_ = 20
 _RETURN_ = 21
 _ELSE_ = 22
-_PESOS_ = 23
+BLANCO = 23
 
 def tipo_simbolo(x):
     return {
@@ -54,7 +54,8 @@ def tipo_simbolo(x):
     _WHILE_: 'while',
     _RETURN_: 'return',
     _ELSE_: 'else',
-    _PESOS_: 'pesos'
+    BLANCO: 'Espacio blanco',
+
     }.get(x,'Error')
 
 class Lexico:
@@ -64,11 +65,16 @@ class Lexico:
     continuar = True
     simbolo = ""
     #cadena = "\"+-)===(=<+g63f=!=&!==={&&{>!!6}} {*)98<=7.|;/&&||od&f,"
-    cadena = "*-¿float34_di3nt--_"
-    flag = False
-    num_flag = 0
+    cadena = "*-_¿f*oat34&&_=di()* w$#%32) nf_t--)==&&&--_dfg45e34t*a"
     guarda_simbolo = ""
-    flag_alfa = False
+
+    def fin_archivo(self, estado_x):
+        if self.caracter == "":
+            self.guarda_simbolo = self.simbolo
+        self.proceso_doble(self, estado_x)
+        if self.caracter == "":
+            self.simbolo = self.guarda_simbolo
+        self.guarda_simbolo = ""
 
     def proceso_doble(self, estado_x):
         self.cont = self.cont -1
@@ -89,21 +95,21 @@ class Lexico:
         self.continuar = False
 
     def sig_simbolo(self):
-        while(self.cont < len(self.cadena)):
+        print("\n\n")
+        print("CADENA: " + self.cadena + "\n")
+        while(self.cont <= len(self.cadena)):
+            if self.cont>0:
+                print("SIMBOLO: " + self.simbolo + " \t\t\tTIPO: " + tipo_simbolo(self.estado))
             self.continuar = True
             self.simbolo = ""
             self.estado = 0
             self.guarda_simbolo = ""
-            self.flag = False
-            #self.flag_alfa = False
+
             while(self.continuar):
                 self.caracter = ""
                 self.caracter = Lexico.sig_caracter(self,self.cadena)
-                #print(self.caracter)
                 if self.estado == 0:
-                    if self.flag_alfa == True:
-                        self.sig_estado(self,IDENTIFICADOR)
-                    elif self.caracter == ',':
+                    if self.caracter == ',':
                         self.aceptacion(self,COMA)
                     elif self.caracter == ';':
                         self.aceptacion(self,PUNTO_Y_COMA)
@@ -131,47 +137,73 @@ class Lexico:
                         self.sig_estado(self, OP_OR)
                     elif self.caracter.isalpha() or self.caracter == '_':
                         self.sig_estado(self,IDENTIFICADOR)
-                    #elif self.caracter.isdigit():
-                    #    self.sig_estado(self, ENTERO)
-                    #else:
-                    #    self.aceptacion(self,0)
+                    elif self.caracter == " ":
+                        self.aceptacion(self,BLANCO)
+                    else:
+                        self.aceptacion(self,0)
                 elif self.estado == IGUAL:
                     if self.caracter != '=':
-                        self.proceso_doble(self, IGUAL)
+                        self.fin_archivo(self, IGUAL)
                     elif self.caracter == '=':
                         self.aceptacion(self, OP_IGUALDAD)
                 elif self.estado == OP_REL:
                     if self.caracter != '=':
-                        self.proceso_doble(self, OP_REL)
+                        self.fin_archivo(self,OP_REL)
                     elif self.caracter == '=':
                         self.aceptacion(self,OP_REL)
                 elif self.estado == OP_NOT:
                     if self.caracter != '=':
-                        self.proceso_doble(self, OP_NOT)
+                        self.fin_archivo(self,OP_NOT)
                     elif self.caracter == '=':
                         self.aceptacion(self, OP_REL)
                 elif self.estado == OP_AND:
                     if self.caracter != '&':
-                        self.proceso_doble(self,0)
+                        self.fin_archivo(self,0)
                     elif self.caracter == '&':
                         self.aceptacion(self,OP_AND)
                 elif self.estado == OP_OR:
                     if self.caracter != '|':
-                        self.proceso_doble(self,0)
+                        self.fin_archivo(self,0)
                     elif self.caracter == '|':
                         self.aceptacion(self,OP_OR)
                 elif self.estado == IDENTIFICADOR:
-                    if self.caracter.isalpha() or self.caracter.isdigit() or self.caracter == '_':
-                        self.guarda_simbolo = self.simbolo
-                    #    print("Antes "+ self.simbolo)
-                        self.sig_estado(self,0)
-                        #self.simbolo = self.guarda_simbolo
-                        self.flag_alfa = True
-                        #print(self.simbolo)
-                    elif self.flag_alfa == True:
+                    self.cont = self.cont - 1
+                    self.guarda_simbolo = self.caracter
+                    self.caracter = self.sig_caracter(self, self.cadena)
+                    if self.caracter.isdigit() or self.caracter.isalpha() or self.caracter == '_':
+                        self.simbolo = self.simbolo[:len(self.simbolo)]
+                        self.sig_estado(self, IDENTIFICADOR)
+                    else:
+                        if self.caracter == "":
+                            self.guarda_simbolo = self.simbolo
+                        self.aceptacion(self, IDENTIFICADOR)
+                        self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                        self.cont = self.cont - 1
+                        if self.caracter == "":
+                            self.simbolo = self.guarda_simbolo
+                        self.guarda_simbolo = ""
+                else:
+                    self.continuar = False
+                    self.estado = 0
+
+
+
+        print("\n\n")
+
+Cl = Lexico
+Cl.sig_simbolo(Cl)
+
+
+
+
+
+
+'''
+
+
                     #    print("Final " +self.simbolo)
                         #self.cont = self.cont -1
-                        '''if self.simbolo == 'if':
+                        if self.simbolo == 'if':
                             self.aceptacion(self, _IF_)
                             self.simbolo = self.simbolo[:len(self.simbolo)-1]
                         elif self.simbolo == 'while':
@@ -186,42 +218,14 @@ class Lexico:
                         elif self.simbolo == 'int' or self.simbolo == 'float' or self.simbolo == 'void':
                             self.aceptacion(self,TIPO)
                             self.simbolo = self.simbolo[:len(self.simbolo)-1]
-                        else:'''
+                        else:
                     #    self.simbolo = self.simbolo[:len(self.simbolo)-1]
                     #    self.aceptacion(self, IDENTIFICADOR)
                         self.proceso_doble(self,IDENTIFICADOR)
-                        self.flag_alfa = False
-                else:
-                    self.continuar = False
-                    self.estado = 0
-
-
-            print("SIMBOLO: " + self.simbolo + "    TIPO: " + tipo_simbolo(self.estado)+ "\n\n")
-
-Cl = Lexico
-Cl.sig_simbolo(Cl)
+                        self.flag_alfa = False '''
 
 
 
-'''elif self.estado == IDENTIFICADOR:
-    if self.caracter.isalpha == False:
-        if self.caracter.isdigit():
-            print(self.caracter)
-            self.guarda_simbolo = self.guarda_simbolo + self.caracter
-            self.caracter = Lexico.sig_caracter(self, self.cadena)
-            self.sig_estado(self, IDENTIFICADOR)
-        else:
-            self.simbolo = self.guarda_simbolo
-            self.proceso_doble(self,IDENTIFICADOR)
-    elif self.caracter.isalpha():
-        print(self.caracter)
-        self.guarda_simbolo = self.guarda_simbolo + self.caracter
-        self.caracter = Lexico.sig_caracter(self, self.cadena)
-        self.sig_estado(self,IDENTIFICADOR)
-    else:
-        self.aceptacion(self,0)
-    os.system("pause")
-    '''
 
 '''    elif self.estado == ENTERO:
         if self.caracter.isdigit() == False and self.caracter != '.':
