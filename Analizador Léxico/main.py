@@ -63,9 +63,12 @@ class Lexico:
     caracter = ""
     continuar = True
     simbolo = ""
-    cadena = "\"+-)===(=<+g63f=!=&!==={&&{>!!6}} {*)98<=7.|;/&&||od&f,"
+    #cadena = "\"+-)===(=<+g63f=!=&!==={&&{>!!6}} {*)98<=7.|;/&&||od&f,"
+    cadena = "*-¿float34_di3nt--_"
     flag = False
     num_flag = 0
+    guarda_simbolo = ""
+    flag_alfa = False
 
     def proceso_doble(self, estado_x):
         self.cont = self.cont -1
@@ -90,12 +93,17 @@ class Lexico:
             self.continuar = True
             self.simbolo = ""
             self.estado = 0
+            self.guarda_simbolo = ""
+            self.flag = False
+            #self.flag_alfa = False
             while(self.continuar):
                 self.caracter = ""
                 self.caracter = Lexico.sig_caracter(self,self.cadena)
                 #print(self.caracter)
                 if self.estado == 0:
-                    if self.caracter == ',':
+                    if self.flag_alfa == True:
+                        self.sig_estado(self,IDENTIFICADOR)
+                    elif self.caracter == ',':
                         self.aceptacion(self,COMA)
                     elif self.caracter == ';':
                         self.aceptacion(self,PUNTO_Y_COMA)
@@ -121,6 +129,10 @@ class Lexico:
                         self.sig_estado(self,OP_AND)
                     elif self.caracter == '|':
                         self.sig_estado(self, OP_OR)
+                    elif self.caracter.isalpha() or self.caracter == '_':
+                        self.sig_estado(self,IDENTIFICADOR)
+                    #elif self.caracter.isdigit():
+                    #    self.sig_estado(self, ENTERO)
                     #else:
                     #    self.aceptacion(self,0)
                 elif self.estado == IGUAL:
@@ -148,6 +160,37 @@ class Lexico:
                         self.proceso_doble(self,0)
                     elif self.caracter == '|':
                         self.aceptacion(self,OP_OR)
+                elif self.estado == IDENTIFICADOR:
+                    if self.caracter.isalpha() or self.caracter.isdigit() or self.caracter == '_':
+                        self.guarda_simbolo = self.simbolo
+                    #    print("Antes "+ self.simbolo)
+                        self.sig_estado(self,0)
+                        #self.simbolo = self.guarda_simbolo
+                        self.flag_alfa = True
+                        #print(self.simbolo)
+                    elif self.flag_alfa == True:
+                    #    print("Final " +self.simbolo)
+                        #self.cont = self.cont -1
+                        '''if self.simbolo == 'if':
+                            self.aceptacion(self, _IF_)
+                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                        elif self.simbolo == 'while':
+                            self.aceptacion(self,_WHILE_)
+                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                        elif self.simbolo == 'return':
+                            self.aceptacion(self,_RETURN_)
+                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                        elif self.simbolo == 'else':
+                            self.aceptacion(self, _ELSE_)
+                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                        elif self.simbolo == 'int' or self.simbolo == 'float' or self.simbolo == 'void':
+                            self.aceptacion(self,TIPO)
+                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                        else:'''
+                    #    self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                    #    self.aceptacion(self, IDENTIFICADOR)
+                        self.proceso_doble(self,IDENTIFICADOR)
+                        self.flag_alfa = False
                 else:
                     self.continuar = False
                     self.estado = 0
@@ -157,3 +200,42 @@ class Lexico:
 
 Cl = Lexico
 Cl.sig_simbolo(Cl)
+
+
+
+'''elif self.estado == IDENTIFICADOR:
+    if self.caracter.isalpha == False:
+        if self.caracter.isdigit():
+            print(self.caracter)
+            self.guarda_simbolo = self.guarda_simbolo + self.caracter
+            self.caracter = Lexico.sig_caracter(self, self.cadena)
+            self.sig_estado(self, IDENTIFICADOR)
+        else:
+            self.simbolo = self.guarda_simbolo
+            self.proceso_doble(self,IDENTIFICADOR)
+    elif self.caracter.isalpha():
+        print(self.caracter)
+        self.guarda_simbolo = self.guarda_simbolo + self.caracter
+        self.caracter = Lexico.sig_caracter(self, self.cadena)
+        self.sig_estado(self,IDENTIFICADOR)
+    else:
+        self.aceptacion(self,0)
+    os.system("pause")
+    '''
+
+'''    elif self.estado == ENTERO:
+        if self.caracter.isdigit() == False and self.caracter != '.':
+            if len(self.guarda_simbolo) == 0:
+                self.proceso_doble(self,ENTERO)
+            elif len(self.guarda_simbolo) > 0 and self.flag == True:
+                self.proceso_doble(self,REAL)
+        elif self.caracter.isdigit():
+            if self.flag != True or len(self.guarda_simbolo)>0:
+                self.simbolo = self.guarda_simbolo
+                self.flag = True
+            self.caracter = self.sig_caracter(self,self.cadena)
+            self.sig_estado(self,ENTERO)
+        elif self.caracter == '.':
+            self.guarda_simbolo = self.simbolo
+            self.caracter = self.sig_caracter(self,self.cadena)
+            self.sig_estado(self,ENTERO)'''
