@@ -35,7 +35,7 @@ def tipo_simbolo(x):
     ENTERO: 'Entero',
     REAL: 'Real',
     CADENA: 'Cadena',
-    TIPO: 'Tipo',
+    TIPO: 'Tipo de dato',
     OP_AD: 'Operador de Adicion',
     OP_MULTI: 'Operador de Multiplicacion',
     OP_REL: 'Operador Relacional',
@@ -50,10 +50,10 @@ def tipo_simbolo(x):
     COR_ABRE: 'Corchete que abre',
     COR_CIERRE: 'Corchete que cierra',
     IGUAL: 'Igual',
-    _IF_: 'if',
-    _WHILE_: 'while',
-    _RETURN_: 'return',
-    _ELSE_: 'else',
+    _IF_: 'Tipo if',
+    _WHILE_: 'Tipo while',
+    _RETURN_: 'Tipo return',
+    _ELSE_: 'Tipo else',
     BLANCO: 'Espacio blanco',
 
     }.get(x,'Error')
@@ -65,8 +65,22 @@ class Lexico:
     continuar = True
     simbolo = ""
     #cadena = "\"+-)===(=<+g63f=!=&!==={&&{>!!6}} {*)98<=7.|;/&&||od&f,"
-    cadena = "*-_¿f*oat34&&_=di()* w$#%32) nf_t--)==&&&--_dfg45e34t*a"
+    cadena = "*-_¿float34*&&_=di(if)* w$#return%32) nf_t-while-)if==&void&int&--_dfg45e,34t*if,"
     guarda_simbolo = ""
+
+    def sel_tipo(self):
+        if self.simbolo == 'if':
+            self.aceptacion(self,_IF_)
+        elif self.simbolo == 'else':
+            self.aceptacion(self, _ELSE_)
+        elif self.simbolo == 'while':
+            self.aceptacion(self,_WHILE_)
+        elif self.simbolo == 'return':
+            self.aceptacion(self,_RETURN_)
+        elif self.simbolo == 'int' or self.simbolo == 'void' or self.simbolo == 'float':
+            self.aceptacion(self,TIPO)
+        else:
+            self.aceptacion(self, IDENTIFICADOR)
 
     def fin_archivo(self, estado_x):
         if self.caracter == "":
@@ -176,7 +190,7 @@ class Lexico:
                     else:
                         if self.caracter == "":
                             self.guarda_simbolo = self.simbolo
-                        self.aceptacion(self, IDENTIFICADOR)
+                        self.sel_tipo(self)
                         self.simbolo = self.simbolo[:len(self.simbolo)-1]
                         self.cont = self.cont - 1
                         if self.caracter == "":
@@ -185,8 +199,6 @@ class Lexico:
                 else:
                     self.continuar = False
                     self.estado = 0
-
-
 
         print("\n\n")
 
