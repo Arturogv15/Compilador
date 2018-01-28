@@ -63,15 +63,14 @@ class Lexico:
     caracter = ""
     continuar = True
     simbolo = ""
-    cadena = "\"+-)===(=<+g63f=!=!==={{>!!6}} {*)98<=7.;odf,"
+    cadena = "\"+-)===(=<+g63f=!=&!==={&&{>!!6}} {*)98<=7.|;/&&||od&f,"
     flag = False
     num_flag = 0
 
-    def aceptacion_doble(self, estado_x):
+    def proceso_doble(self, estado_x):
         self.cont = self.cont -1
         self.aceptacion(self, estado_x)
         self.simbolo = self.simbolo[:len(self.simbolo)-1]
-
 
     def sig_estado(self,estado_x):
         self.simbolo = self.simbolo + self.caracter
@@ -118,25 +117,43 @@ class Lexico:
                         self.sig_estado(self,OP_REL)
                     elif self.caracter == '!':
                         self.sig_estado(self,OP_NOT)
+                    elif self.caracter == '&':
+                        self.sig_estado(self,OP_AND)
+                    elif self.caracter == '|':
+                        self.sig_estado(self, OP_OR)
+                    #else:
+                    #    self.aceptacion(self,0)
                 elif self.estado == IGUAL:
                     if self.caracter != '=':
-                        self.aceptacion_doble(self, IGUAL)
+                        self.proceso_doble(self, IGUAL)
                     elif self.caracter == '=':
                         self.aceptacion(self, OP_IGUALDAD)
                 elif self.estado == OP_REL:
                     if self.caracter != '=':
-                        self.aceptacion_doble(self, OP_REL)
+                        self.proceso_doble(self, OP_REL)
                     elif self.caracter == '=':
                         self.aceptacion(self,OP_REL)
                 elif self.estado == OP_NOT:
                     if self.caracter != '=':
-                        self.aceptacion_doble(self, OP_NOT)
+                        self.proceso_doble(self, OP_NOT)
                     elif self.caracter == '=':
                         self.aceptacion(self, OP_REL)
+                elif self.estado == OP_AND:
+                    if self.caracter != '&':
+                        self.proceso_doble(self,0)
+                    elif self.caracter == '&':
+                        self.aceptacion(self,OP_AND)
+                elif self.estado == OP_OR:
+                    if self.caracter != '|':
+                        self.proceso_doble(self,0)
+                    elif self.caracter == '|':
+                        self.aceptacion(self,OP_OR)
                 else:
                     self.continuar = False
+                    self.estado = 0
 
 
             print("SIMBOLO: " + self.simbolo + "    TIPO: " + tipo_simbolo(self.estado)+ "\n\n")
+
 Cl = Lexico
 Cl.sig_simbolo(Cl)
