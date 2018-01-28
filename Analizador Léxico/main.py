@@ -63,30 +63,38 @@ class Lexico:
     caracter = ""
     continuar = True
     simbolo = ""
-    cadena = "+-)(+g63f6}} {*)987.;odf,"
+    cadena = "\"+-)===(=<+g63f=!=!==={{>!!6}} {*)98<=7.;odf,"
     flag = False
     num_flag = 0
 
-    def sigEstado(self,estado_x):
+    def aceptacion_doble(self, estado_x):
+        self.cont = self.cont -1
+        self.aceptacion(self, estado_x)
+        self.simbolo = self.simbolo[:len(self.simbolo)-1]
+
+
+    def sig_estado(self,estado_x):
         self.simbolo = self.simbolo + self.caracter
         self.estado = estado_x
 
-    def sigCaracter(self,cadena):
+    def sig_caracter(self,cadena):
         self.cont = self.cont + 1
-
         return self.cadena[self.cont-1:self.cont]
 
     def aceptacion(self,estado_x):
         self.estado = estado_x
+        self.simbolo = self.simbolo + self.caracter
         self.continuar = False
 
-    def sigSimbolo(self):
+    def sig_simbolo(self):
         while(self.cont < len(self.cadena)):
             self.continuar = True
+            self.simbolo = ""
             self.estado = 0
             while(self.continuar):
-                self.caracter = Lexico.sigCaracter(self,self.cadena)
-
+                self.caracter = ""
+                self.caracter = Lexico.sig_caracter(self,self.cadena)
+                #print(self.caracter)
                 if self.estado == 0:
                     if self.caracter == ',':
                         self.aceptacion(self,COMA)
@@ -104,7 +112,31 @@ class Lexico:
                         self.aceptacion(self,OP_AD)
                     elif self.caracter == '/' or self.caracter == '*':
                         self.aceptacion(self,OP_MULTI)
+                    elif self.caracter == '=':
+                        self.sig_estado(self,IGUAL)
+                    elif self.caracter == '<' or self.caracter == '>':
+                        self.sig_estado(self,OP_REL)
+                    elif self.caracter == '!':
+                        self.sig_estado(self,OP_NOT)
+                elif self.estado == IGUAL:
+                    if self.caracter != '=':
+                        self.aceptacion_doble(self, IGUAL)
+                    elif self.caracter == '=':
+                        self.aceptacion(self, OP_IGUALDAD)
+                elif self.estado == OP_REL:
+                    if self.caracter != '=':
+                        self.aceptacion_doble(self, OP_REL)
+                    elif self.caracter == '=':
+                        self.aceptacion(self,OP_REL)
+                elif self.estado == OP_NOT:
+                    if self.caracter != '=':
+                        self.aceptacion_doble(self, OP_NOT)
+                    elif self.caracter == '=':
+                        self.aceptacion(self, OP_REL)
+                else:
+                    self.continuar = False
 
-                print("SIMBOLO: " + self.caracter + "    TIPO: " + tipo_simbolo(self.estado)+ "\n\n")
+
+            print("SIMBOLO: " + self.simbolo + "    TIPO: " + tipo_simbolo(self.estado)+ "\n\n")
 Cl = Lexico
-Cl.sigSimbolo(Cl)
+Cl.sig_simbolo(Cl)
