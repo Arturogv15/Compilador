@@ -64,10 +64,20 @@ class Lexico:
     caracter = ""
     continuar = True
     simbolo = ""
-    #cadena = "\"+-)===(=<+g63f=!=&!==={&&{>!!6}} {*)98<=7.|;/&&||od&f,"
-    cadena = "*-_¿float34*&&_=di(if)* w$#return%32) nf_t-while-)if==&void&int&--_dfg45e,34t*if,"
+    #cadena1 = "3=+g63f5!=11&!==5={&&\"_3455\"6{6})98<=7.|.3d&5.3.34.3f,.2-.3423.21==3455345"
+    #cadena2 = "*-_¿float34*&&_=di(if)* w$#return%32) nf_t-while-)if==&void&int&--_dfg45e,34t*if,"
+    #cadena3 = "345.23sdf3rv435.34.34545.345a"
+    #cadena = cadena1 + cadena2 + cadena3
     guarda_simbolo = ""
-
+    bandera = False
+    punto = False
+    cont_punto = 0
+    simbolos = []
+    tipos = []
+    archivo = open("entrada.txt", "r")
+    cadena = archivo.read()
+    archivo.close()
+    
     def sel_tipo(self):
         if self.simbolo == 'if':
             self.aceptacion(self,_IF_)
@@ -109,15 +119,20 @@ class Lexico:
         self.continuar = False
 
     def sig_simbolo(self):
-        print("\n\n")
-        print("CADENA: " + self.cadena + "\n")
+        print("\n")
+        print("CADENA: " + self.cadena)
         while(self.cont <= len(self.cadena)):
             if self.cont>0:
-                print("SIMBOLO: " + self.simbolo + " \t\t\tTIPO: " + tipo_simbolo(self.estado))
+                #print("SIMBOLO: " + self.simbolo + "      \t\t\tTIPO: " + tipo_simbolo(self.estado))
+                self.simbolos.append(self.simbolo)
+                self.tipos.append(tipo_simbolo(self.estado))
+
             self.continuar = True
             self.simbolo = ""
             self.estado = 0
             self.guarda_simbolo = ""
+            self.punto = False
+            self.cont_punto = 0
 
             while(self.continuar):
                 self.caracter = ""
@@ -151,6 +166,8 @@ class Lexico:
                         self.sig_estado(self, OP_OR)
                     elif self.caracter.isalpha() or self.caracter == '_':
                         self.sig_estado(self,IDENTIFICADOR)
+                    elif self.caracter.isdigit():
+                        self.sig_estado(self,ENTERO)
                     elif self.caracter == " ":
                         self.aceptacion(self,BLANCO)
                     else:
@@ -180,6 +197,32 @@ class Lexico:
                         self.fin_archivo(self,0)
                     elif self.caracter == '|':
                         self.aceptacion(self,OP_OR)
+                elif self.estado == ENTERO:
+                    self.guarda_simbolo = self.simbolo
+                    if self.caracter.isdigit() or self.caracter == '.':
+                        if self.caracter == '.':
+                            self.punto = True
+                            self.cont_punto = self.cont_punto +1
+                        if self.cont_punto == 2:
+                            self.proceso_doble(self,REAL)
+
+                        else:
+                            self.sig_estado(self,ENTERO)
+                    elif self.punto == True:
+                        #print(self.guarda_simbolo)
+                        self.simbolo = self.guarda_simbolo
+                        self.proceso_doble(self,REAL)
+                        #self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                        #print(self.simbolo[len(self.simbolo)-1:len(self.simbolo)])
+                        if self.simbolo[len(self.simbolo)-1:len(self.simbolo)] == '.':
+                            self.cont = self.cont -1
+                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
+                    else:
+                        self.fin_archivo(self,ENTERO)
+                        #self.proceso_doble(self,ENTERO)
+                        #print("SIM_ " + self.simbolo)
+                        self.punto = False
+
                 elif self.estado == IDENTIFICADOR:
                     self.cont = self.cont - 1
                     self.guarda_simbolo = self.caracter
@@ -201,57 +244,11 @@ class Lexico:
                     self.estado = 0
 
         print("\n\n")
+        return self.simbolos
 
 Cl = Lexico
-Cl.sig_simbolo(Cl)
+SIM = Cl.sig_simbolo(Cl)
 
-
-
-
-
-
-'''
-
-
-                    #    print("Final " +self.simbolo)
-                        #self.cont = self.cont -1
-                        if self.simbolo == 'if':
-                            self.aceptacion(self, _IF_)
-                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
-                        elif self.simbolo == 'while':
-                            self.aceptacion(self,_WHILE_)
-                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
-                        elif self.simbolo == 'return':
-                            self.aceptacion(self,_RETURN_)
-                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
-                        elif self.simbolo == 'else':
-                            self.aceptacion(self, _ELSE_)
-                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
-                        elif self.simbolo == 'int' or self.simbolo == 'float' or self.simbolo == 'void':
-                            self.aceptacion(self,TIPO)
-                            self.simbolo = self.simbolo[:len(self.simbolo)-1]
-                        else:
-                    #    self.simbolo = self.simbolo[:len(self.simbolo)-1]
-                    #    self.aceptacion(self, IDENTIFICADOR)
-                        self.proceso_doble(self,IDENTIFICADOR)
-                        self.flag_alfa = False '''
-
-
-
-
-'''    elif self.estado == ENTERO:
-        if self.caracter.isdigit() == False and self.caracter != '.':
-            if len(self.guarda_simbolo) == 0:
-                self.proceso_doble(self,ENTERO)
-            elif len(self.guarda_simbolo) > 0 and self.flag == True:
-                self.proceso_doble(self,REAL)
-        elif self.caracter.isdigit():
-            if self.flag != True or len(self.guarda_simbolo)>0:
-                self.simbolo = self.guarda_simbolo
-                self.flag = True
-            self.caracter = self.sig_caracter(self,self.cadena)
-            self.sig_estado(self,ENTERO)
-        elif self.caracter == '.':
-            self.guarda_simbolo = self.simbolo
-            self.caracter = self.sig_caracter(self,self.cadena)
-            self.sig_estado(self,ENTERO)'''
+for i in range(len(SIM)):
+    print("SIMBOLO: " + SIM[i] + "      \t\t\tTIPO: " + Cl.tipos[i])
+print("")
