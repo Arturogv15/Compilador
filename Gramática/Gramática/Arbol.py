@@ -51,175 +51,182 @@ EXPRESION_AND = 49                          #
 EXPRESION_OR = 50                           #
 EXPRESION_TERMINO = 51                      #
 
-class Expresion_doble():
+
+class Node():
+    def __init__():
+        self.izquierda = None
+        self.derecha = None
+        self.centro = None
+
+class Expresion_doble(Node):
     def __init__(self,Expresion1,Expresion2):
         self.expresion1 = Expresion1
         self.expresion2 = Expresion2
 
-class Expresion():
+class Expresion(Node):
     def __init__(self,Expresion):
         self.expresion = Expresion
 
-class Expresion_Termino():
+class Expresion_Termino(Node):
     def __init__(self, Termino):
         self.termino = Termino
 
-class Termino_id():
+class Termino_id(Node):
     def __init__(self,id):
         self.elemento = id
 
-class Termino_real():
+class Termino_real(Node):
     def __init__(self,real):
         self.elemento = real
 
-class Termino_cadena():
+class Termino_cadena(Node):
     def __init__(self,cadena):
         self.elemento = cadena
 
-class Termino_entero():
+class Termino_entero(Node):
     def __init__(self,entero):
         self.elemento = entero
 
-class Termino_llamada_funcion():
+class Termino_llamada_funcion(Node):
     def __init__(self,LlamadaFuncion):
         self.llamada_funcion = LlamadaFuncion
 
-class LlamadaFuncion():
+class LlamadaFuncion(Node):
     def __init__(self,identificador,Argumentos):
         self.identificador = identificador
         self.argumentos = Argumentos
 
-class ValorRegresa():
+class ValorRegresa(Node):
     def __init__(self,Expresion):
         self.vacio = None
         self.expresion = Expresion
 
-class ListaArgumentos():
+class ListaArgumentos(Node):
     def __init__(self,Expresion,ListaArgumentos):
         self.vacio = None
         self.expresion = Expresion
         self.lista_argumentos = ListaArgumentos
 
-class Argumentos():
+class Argumentos(Node):
     def __init__(self,ListaArgumentos,Expresion):
         self.vacio = None
         self.expresion = Expresion
         self.lista_argumentos = ListaArgumentos
 
 
-class Sentencia_asignacion():
+class Sentencia_asignacion(Node):
     def __init__(self,id,Expresion):
         self.expresion = Expresion
         self.identificador = id
 
-class Sentencia_if():
+class Sentencia_if(Node):
     def __init__(self,Expresion,SentenciaBloque,Otro):
         self.expresion = Expresion
         self.sentencia_bloque = SentenciaBloque
         self.otro = Otro
 
-class Sentencia_while():
+class Sentencia_while(Node):
     def __init__(self,Expresion,Bloque):
         self.expresion = Expresion
         self.bloque = Bloque
 
-class Sentencia_return():
+class Sentencia_return(Node):
     def __init__(self,ValorRegresa):
         self.valor_regresa = ValorRegresa
 
-class Sentencia_llamada():
+class Sentencia_llamada(Node):
     def __init__(self,LlamadaFuncion):
         self.llamada_funcion = LlamadaFuncion
 
-class Bloque():
+class Bloque(Node):
     def __init__(self,Sentencias):
         self.sentencias = Sentencias
 
-class Sentencias():
+class Sentencias(Node):
     def __init__(self,Sentencia,Sentencias):
         self.vacio = None
         self.sentencia = Sentencia
         self.sentencias = Sentencias
 
-class SentenciaBloque_B():
+class SentenciaBloque_B(Node):
     def __init__(self,Bloque):
         self.bloque = Bloque
 
-class SentenciaBloque_S():
+class SentenciaBloque_S(Node):
     def __init__(self,Sentencia):
         self.sentencia = Sentencia
 
-class Otro():
+class Otro(Node):
     def __init__(self, SentenciaBloque):
         self.vacio = None
         self.sentencia_bloque = SentenciaBloque
 
-class DefLocal_S():
+class DefLocal_S(Node):
     def __init__(self,Sentencia):
         self.sentencia = Sentencia
 
-class DefLocal_V():
+class DefLocal_V(Node):
     def __init__(self,DefVar):
         self.def_variables = DefVar
 
-class DefLocales():
+class DefLocales(Node):
     def __init__(self,DefLocal, DefLocales):
         self.vacio = None
         self.def_local = DefLocal
         self.def_locales = DefLocales
 
-class BloqueFuncion():
+class BloqueFuncion(Node):
     def __init__(self,DefLocales):
         self.def_locales = DefLocales
 
-class DefFun():
+class DefFun(Node):
     def __init__(self,Parametros,BloqueFuncion,tipo,identificador):
         self.parametros = Parametros
         self.bloque_funcion = BloqueFuncion
         self.tipo = tipo
         self.identificador = identificador
 
-class DefVar():
+class DefVar(Node):
     def __init__(self,tipo, identificador,ListaVar):
         self.tipo = tipo
         self.identificador = identificador
         self.lista_variables = ListaVar
 
-class ListaVar():
+class ListaVar(Node):
     def __init__(self,indetificador,ListaVar):
         self.vacio = None
         self.identificador = identificador
         self.ListaVar = ListaVar
 
-class Parametros():
+class Parametros(Node):
     def __init__(self,ListaParam,tipo,identificador):
         self.vacio = None
         self.tipo = tipo
         self.identificador = identificador
         self.lista_parametros = ListaParam
 
-class ListaParam():
+class ListaParam(Node):
     def __init__(self,tipo,identificador,ListaParam):
         self.vacio = None
         self.tipo = tipo
         self.identificador = identificador
         self.lista_parametros = ListaParam
 
-class Definicion_Fun():
+class Definicion_Fun(Node):
     def __init__(self,DefFun):
         self.def_funcion = DefFun
 
-class Definicion_Var():
+class Definicion_Var(Node):
     def __init__(self,DefVar):
         self.def_variable = DefVar
 
-class Definiciones():
+class Definiciones(Node):
     def __init__(self,Definicion,Definiciones):
         self.vacio = None
         self.definicion = Definicion
         self.definiciones = Definiciones
 
-class Programa():
+class Programa(Node):
     def __init__(self, Definiciones):
         self.definiciones = Definiciones
 
@@ -252,6 +259,16 @@ class Arbol():
     def pop_pila_arbol(self):
         return self.lista_arbol.pop()
 
+    def postorden(self,arbol):
+        if arbol != None:
+            self.postorden(arbol.izquierda)
+            self.postorden(arbol.derecha)
+            print(arbol.__dict__)
+            #print("Raiz:   " + str(arbol))
+            #print("Izq:    " + str(arbol.izquierda))
+            #print("Der:    " + str(arbol.derecha))
+            print("\n")
+
     def forma_arbol(self,pila,pila_codigo,elementos,accion):
         self.regla = int(accion)-1
 
@@ -259,30 +276,48 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Programa(self.pop_pila_arbol()))
+            pop_pila = self.pop_pila_arbol()
+            _Programa = Programa(pop_pila)
+            _Programa.derecha = pop_pila
+            _Programa.izquierda = None
+            self.push_pila_arbol(_Programa)
 
         elif self.regla == DEFINICIONES or self.regla == DEFINICIONES_V:
             if self.regla == DEFINICIONES_V:
-                self.push_pila_arbol(Definiciones(None,None))
+                _Definiciones = Definiciones(None,None)
+                _Definiciones.izquierda = None
+                _Definiciones.derecha = None
+                self.push_pila_arbol(_Definiciones)
             else:
                 for i in range(elementos[self.regla]*2):
                     pila.pop()
                     pila_codigo.pop()
                 definiciones = self.pop_pila_arbol()
                 definicion = self.pop_pila_arbol()
-                self.push_pila_arbol(Definiciones(definicion,definiciones))
+                _Definiciones = Definiciones(definicion,definiciones)
+                _Definiciones.izquierda = definicion
+                _Definiciones.derecha = definiciones
+                self.push_pila_arbol(_Definiciones)
 
         elif self.regla == DEFINICION_FUN:
             for i in range(elementos[self.regla]*2):
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Definicion_Fun(self.pop_pila_arbol()))
+            pop_pila = self.pop_pila_arbol()
+            _definicion = Definicion_Fun(pop_pila)
+            _definicion.derecha = pop_pila
+            _definicion.izquierda = None
+            self.push_pila_arbol(_definicion)
 
         elif self.regla == DEFINICION_VAR:
             for i in range(elementos[self.regla]*2):
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Definicion_Var(self.pop_pila_arbol()))
+            pop_pila = self.pop_pila_arbol()
+            _definicion = Definicion_Var(pop_pila)
+            _definicion.izquierda = pop_pila
+            _definicion.derecha = None
+            self.push_pila_arbol(_definicion)
 
         elif self.regla == DEFFUN:
             for i in range(elementos[self.regla]*2):
@@ -294,19 +329,28 @@ class Arbol():
                 pila_codigo.pop()
             bloque_fun = self.pop_pila_arbol()
             param = self.pop_pila_arbol()
-            self.push_pila_arbol(DefFun(param,bloque_fun,self.tipo,self.id))
+            def_fun = DefFun(param,bloque_fun,self.tipo,self.id)
+            def_fun.izquierda = param
+            def_fun.derecha = bloque_fun
+            self.push_pila_arbol(def_fun)
 
         elif self.regla == BLOQFUNC:
             for i in range(elementos[self.regla]*2):
                 if i == 3:
-                    def_locales = self.pop_pila_arbol()
-                    self.push_pila_arbol(BloqueFuncion(def_locales))
+                     def_locales = self.pop_pila_arbol()
+                     bloque_fun = BloqueFuncion(def_locales)
+                     bloque_fun.derecha = def_locales
+                     bloque_fun.izquierda = None
+                     self.push_pila_arbol(bloque_fun)
                 pila.pop()
                 pila_codigo.pop()
 
         elif self.regla == DEFLOCALES_V or self.regla == DEFLOCALES:
             if self.regla == DEFLOCALES_V:
-                self.push_pila_arbol(DefLocales(None,None))
+                def_locales = DefLocales(None,None)
+                def_locales.derecha = None
+                def_locales.izquierda = None
+                self.push_pila_arbol(def_locales)
             else:
                 for i in range(elementos[self.regla]*2):
                     if i==1:
@@ -315,11 +359,17 @@ class Arbol():
                         self.def_local = self.pop_pila_arbol()
                     pila.pop()
                     pila_codigo.pop()
-                self.push_pila_arbol(DefLocales(self.def_local,self.def_locales))
+                def_locales = DefLocales(self.def_local,self.def_locales)
+                def_locales.derecha = self.def_locales
+                def_locales.izquierda = self.def_local
+                self.push_pila_arbol(def_locales)
 
         elif self.regla == PARAMETROS or self.regla == PARAMETROS_V:
             if self.regla == PARAMETROS_V:
-                self.push_pila_arbol(Parametros(None,None,None))
+                _parametros = Parametros(None,None,None)
+                _parametros.derecha = None
+                _parametros.izquierda = None
+                self.push_pila_arbol(_parametros)
             else:
                 for i in range(elementos[self.regla]*2):
                     if i == 1:
@@ -330,11 +380,17 @@ class Arbol():
                         self.tipo = pila_codigo.top()
                     pila.pop()
                     pila_codigo.pop()
-                self.push_pila_arbol(Parametros(self.lista_parametros,self.tipo,self.id))
+                _parametros = Parametros(self.lista_parametros,self.tipo,self.id)
+                _parametros.derecha = self.lista_parametros
+                _parametros.izquierda = None
+                self.push_pila_arbol(_parametros)
 
         elif self.regla == LISTAPARAM or self.regla == LISTAPARAM_V:
             if self.regla == LISTAPARAM_V:
-                self.push_pila_arbol(ListaParam(None,None,None))
+                _lista_param = ListaParam(None,None,None)
+                _lista_param.derecha = None
+                _lista_param.izquierda = None
+                self.push_pila_arbol(_lista_param)
             else:
                 for i in range(elementos[self.regla]*2):
                     if i == 1:
@@ -345,7 +401,13 @@ class Arbol():
                         self.tipo = pila_codigo.top()
                     pila.pop()
                     pila_codigo.pop()
-                self.push_pila_arbol(ListaParam(self.tipo,self.id,self.lista_parametros))
+                _lista_param = ListaParam(self.tipo,self.id,self.lista_parametros)
+                if _lista_param == None:
+                    _lista_param.derecha = None
+                else:
+                    _lista_param.derecha = self.lista_parametros
+                _lista_param.izquierda = None
+                self.push_pila_arbol(_lista_param)
 
         elif self.regla == LLAMADAFUN:
             for i in range(elementos[self.regla]*2):
@@ -355,13 +417,19 @@ class Arbol():
                     self.id = pila_codigo.top()
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(LlamadaFuncion(self.id,self.argumentos))
+            _llamada_fun = LlamadaFuncion(self.id,self.argumentos)
+            _llamada_fun.derecha = self.argumentos
+            _llamada_fun.izquierda = None
+            self.push_pila_arbol(_llamada_fun)
 
         elif self.regla == TERMINO_CALLFUN:
             for i in range(elementos[self.regla]*2):
                 if i==1:
                     llamada_funcion = self.pop_pila_arbol()
-                    self.push_pila_arbol(Termino_llamada_funcion(llamada_funcion))
+                    ter_llamada = Termino_llamada_funcion(llamada_funcion)
+                    ter_llamada.derecha = llamada_funcion
+                    ter_llamada.izquierda = None
+                    self.push_pila_arbol(ter_llamada)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -371,13 +439,19 @@ class Arbol():
                     self.id = pila_codigo.top()
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Termino_id(self.id))
+            termino_id = Termino_id(self.id)
+            termino_id.derecha = None
+            termino_id.izquierda = None
+            self.push_pila_arbol(termino_id)
 
         elif self.regla == TERMINO_INT:
             for i in range(elementos[self.regla]*2):
                 if i==1:
                     entero = pila_codigo.top()
-                    self.push_pila_arbol(Termino_entero(entero))
+                    termino_entero = Termino_entero(entero)
+                    termino_entero.derecha = None
+                    termino_entero.izquierda = None
+                    self.push_pila_arbol(termino_entero)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -385,7 +459,10 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i==1:
                     cadena = pila_codigo.top()
-                    self.push_pila_arbol(Termino_cadena(cadena))
+                    termino_cadena = Termino_cadena(cadena)
+                    termino_cadena.derecha = None
+                    termino_cadena.izquierda = None
+                    self.push_pila_arbol(termino_cadena)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -393,7 +470,10 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i==1:
                     real = pila_codigo.top()
-                    self.push_pila_arbol(Termino_real(real))
+                    termino_real = Termino_real(real)
+                    termino_real.izquierda = None
+                    termino_real.derecha = None
+                    self.push_pila_arbol(termino_real)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -401,7 +481,10 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i==3:
                     expresion = self.pop_pila_arbol()
-                    self.push_pila_arbol(Expresion(expresion))
+                    _expresion = Expresion(expresion)
+                    _expresion.izquierda = None
+                    _expresion.derecha = expresion
+                    self.push_pila_arbol(_expresion)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -409,7 +492,10 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i==1:
                     termino = self.pop_pila_arbol()
-                    self.push_pila_arbol(Expresion_Termino(termino))
+                    exp_termino = Expresion_Termino(termino)
+                    exp_termino.derecha = termino
+                    exp_termino.izquierda = None
+                    self.push_pila_arbol(exp_termino)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -417,7 +503,10 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i==1:
                     expresion = self.pop_pila_arbol()
-                    self.push_pila_arbol(Expresion(expresion))
+                    exp_mas_not = Expresion(expresion)
+                    exp_mas_not.derecha = expresion
+                    exp_mas_not.izquierda = None
+                    self.push_pila_arbol(exp_mas_not)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -429,7 +518,10 @@ class Arbol():
                     self.expresion1 = self.pop_pila_arbol()
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Expresion_doble(self.expresion1,self.expresion2))
+            exp_doble = Expresion_doble(self.expresion1,self.expresion2)
+            exp_doble.derecha = self.expresion2
+            exp_doble.izquierda = self.expresion1
+            self.push_pila_arbol(exp_doble)
 
         elif self.regla == EXPRESION_MULT or self.regla == EXPRESION_AND or self.regla == EXPRESION_OR:
             for i in range(elementos[self.regla]*2):
@@ -439,7 +531,10 @@ class Arbol():
                     self.expresion1 = self.pop_pila_arbol()
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Expresion_doble(self.expresion1,self.expresion2))
+            exp_doble = Expresion_doble(self.expresion1,self.expresion2)
+            exp_doble.derecha = self.expresion2
+            exp_doble.izquierda = self.expresion1
+            self.push_pila_arbol(exp_doble)
 
         elif self.regla == SENTENCIA_ASIG:
             for i in range(elementos[self.regla]*2):
@@ -449,11 +544,17 @@ class Arbol():
                     self.id = pila_codigo.top()
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Sentencia_asignacion(self.id,self.expresion1))
+            sent_asig = Sentencia_asignacion(self.id,self.expresion1)
+            sent_asig.derecha = self.expresion1
+            sent_asig.izquierda = None
+            self.push_pila_arbol(sent_asig)
 
         elif self.regla == SENTENCIAS or self.regla == SENTENCIAS_V:
             if self.regla == SENTENCIAS_V:
-                self.push_pila_arbol(Sentencias(None,None))
+                sentencias = Sentencias(None,None)
+                sentencias.derecha = None
+                sentencias.izquierda = None
+                self.push_pila_arbol(sentencias)
             else:
                 for i in range(elementos[self.regla]*2):
                     if i == 1:
@@ -462,21 +563,30 @@ class Arbol():
                         self.sentencia = self.pop_pila_arbol()
                     pila.pop()
                     pila_codigo.pop()
-                self.push_pila_arbol(Sentencias(self.sentencia,self.sentencias))
+                sentencias = Sentencias(self.sentencia,self.sentencias)
+                sentencias.derecha = self.sentencias
+                sentencias.izquierda = self.sentencia
+                self.push_pila_arbol(sentencias)
 
         elif self.regla == BLOQUE:
             for i in range(elementos[self.regla]*2):
                 if i == 3:
                     self.sentencias = self.pop_pila_arbol()
+                    bloque = Bloque(self.sentencias)
+                    bloque.derecha = self.sentencias
+                    bloque.izquierda = None
+                    self.push_pila_arbol(bloque)
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Bloque(self.sentencias))
 
         elif self.regla == SENTENCIABLOQUE_BLOQ:
             for i in range(elementos[self.regla]*2):
                 if i == 1:
                     bloque = self.pop_pila_arbol()
-                    self.push_pila_arbol(SentenciaBloque_B(bloque))
+                    sent_bloque_b = SentenciaBloque_B(bloque)
+                    sent_bloque_b.derecha = bloque
+                    sent_bloque_b.izquierda = None
+                    self.push_pila_arbol(sent_bloque_b)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -484,18 +594,27 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i == 1:
                     sentencia = self.pop_pila_arbol()
-                    self.push_pila_arbol(SentenciaBloque_S(sentencia))
+                    sent_bloque_s = SentenciaBloque_S(sentencia)
+                    sent_bloque_s.derecha = sentencia
+                    sent_bloque_s.izquierda = None
+                    self.push_pila_arbol(sent_bloque_s)
                 pila.pop()
                 pila_codigo.pop()
 
         elif self.regla == OTRO or self.regla == OTRO_V:
             if self.regla == OTRO_V:
-                self.push_pila_arbol(Otro(None))
+                otro = Otro(None)
+                otro.derecha = None
+                otro.izquierda = None
+                self.push_pila_arbol(otro)
             else:
                 for i in range(elementos[self.regla]*2):
                     if i == 1:
                         sentencia_bloque = self.pop_pila_arbol()
-                        self.push_pila_arbol(Otro(sentencia_bloque))
+                        otro = Otro(sentencia_bloque)
+                        otro.derecha = sentencia_bloque
+                        otro.izquierda = None
+                        self.push_pila_arbol(otro)
                     pila.pop()
                     pila_codigo.pop()
 
@@ -509,7 +628,11 @@ class Arbol():
                     self.expresion1 = self.pop_pila_arbol()
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Sentencia_if(self.expresion1,self.sentencia_bloque,self.otro))
+            _if = Sentencia_if(self.expresion1,self.sentencia_bloque,self.otro)
+            _if.derecha = self.otro
+            _if.izquierda = self.expresion1
+            _if.centro = self.sentencia_bloque
+            self.push_pila_arbol(_if)
 
         elif self.regla == SENTENCIA_WHILE:
             for i in range(elementos[self.regla]*2):
@@ -519,13 +642,19 @@ class Arbol():
                     self.expresion1 = self.pop_pila_arbol()
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(Sentencia_while(self.expresion1,self.bloque))
+            _while = Sentencia_while(self.expresion1,self.bloque)
+            _while.izquierda = self.expresion1
+            _while.derecha = self.bloque
+            self.push_pila_arbol(_while)
 
         elif self.regla == SENTENCIA_RETURN:
             for i in range(elementos[self.regla]*2):
                 if i == 3:
                     valor_regresa = self.pop_pila_arbol()
-                    self.push_pila_arbol(Sentencia_return(valor_regresa))
+                    _return = Sentencia_return(valor_regresa)
+                    _return.izquierda = None
+                    _return.derecha = valor_regresa
+                    self.push_pila_arbol(_return)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -533,7 +662,10 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i == 3:
                     llamada_funcion = self.pop_pila_arbol()
-                    self.push_pila_arbol(Sentencia_llamada(llamada_funcion))
+                    _llamada = Sentencia_llamada(llamada_funcion)
+                    _llamada.izquierda = None
+                    _llamada.derecha = llamada_funcion
+                    self.push_pila_arbol(_llamada)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -541,7 +673,10 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i == 1:
                     self.sentencia = self.pop_pila_arbol()
-                    self.push_pila_arbol(DefLocal_S(self.sentencia))
+                    defloc = DefLocal_S(self.sentencia)
+                    defloc.derecha = self.sentencia
+                    defloc.izquierda = None
+                    self.push_pila_arbol(defloc)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -549,7 +684,10 @@ class Arbol():
             for i in range(elementos[self.regla]*2):
                 if i == 1:
                     self.variable = self.pop_pila_arbol()
-                    self.push_pila_arbol(DefLocal_V(self.variable))
+                    defloc = DefLocal_V(self.variable)
+                    defloc.derecha = self.sentencia
+                    defloc.izquierda = None
+                    self.push_pila_arbol(defloc)
                 pila.pop()
                 pila_codigo.pop()
 
@@ -563,11 +701,17 @@ class Arbol():
                     self.tipo = pila_codigo.top()
                 pila.pop()
                 pila_codigo.pop()
-            self.push_pila_arbol(DefVar(self.tipo,self.id,self.lista_variables))
+            def_var = DefVar(self.tipo,self.id,self.lista_variables)
+            def_var.derecha = self.lista_variables
+            def_var.izquierda = None
+            self.push_pila_arbol(def_var)
 
         elif self.regla == LISTAVAR or self.regla == LISTAVAR_V:
             if self.regla == LISTAVAR_V:
-                self.push_pila_arbol(ListaVar(None,None))
+                lista_var = ListaVar(None,None)
+                lista_var.derecha = None
+                lista_var.izquierda = None
+                self.push_pila_arbol(lista_var)
             else:
                 for i in range(elementos[self.regla]*2):
                     if i == 1:
@@ -576,23 +720,35 @@ class Arbol():
                         self.id = pila_codigo.top()
                     pila.pop()
                     pila_codigo.pop()
-                self.push_pila_arbol(ListaVar(self.id,self.lista_variables))
+                lista_var = ListaVar(self.id,self.lista_variables)
+                lista_var.derecha = self.lista_variables
+                lista_var.izquierda = None
+                self.push_pila_arbol(lista_var)
 
 
         elif self.regla == VALORREGRESA or self.regla == VALORREGRESA_V:
             if self.regla == VALORREGRESA_V:
-                self.push_pila_arbol(ValorRegresa(None))
+                valor_r = ValorRegresa(None)
+                valor_r.derecha = None
+                valor_r.izquierda = None
+                self.push_pila_arbol(valor_r)
             else:
                 for i in range(elementos[self.regla]*2):
                     if i == 1:
                         self.expresion1 = self.pop_pila_arbol()
-                        self.push_pila_arbol(ValorRegresa(self.expresion1))
+                        valor_r = ValorRegresa(self.expresion1)
+                        valor_r.derecha = self.expresion1
+                        valor_r.izquierda = None
+                        self.push_pila_arbol(valor_r)
                     pila.pop()
                     pila_codigo.pop()
 
         elif self.regla == ARGUMENTOS or self.regla == ARGUMENTOS_V:
             if self.regla == ARGUMENTOS_V:
-                self.push_pila_arbol(Argumentos(None,None))
+                args = Argumentos(None,None)
+                args.derecha = None
+                args.izquierda = None
+                self.push_pila_arbol(args)
             else:
                 for i in range(elementos[self.regla]*2):
                     if  i == 1:
@@ -601,11 +757,17 @@ class Arbol():
                         self.expresion1 = self.pop_pila_arbol()
                     pila.pop()
                     pila_codigo.pop()
-                self.push_pila_arbol(Argumentos(self.lista_argumentos,self.expresion1))
+                args = Argumentos(self.lista_argumentos,self.expresion1)
+                args.derecha = self.lista_argumentos
+                args.izquierda = self.expresion1
+                self.push_pila_arbol(args)
 
         elif self.regla == LISTAARGUMENTOS or self.regla == LISTAARGUMENTOS_V:
             if self.regla == LISTAARGUMENTOS_V:
-                self.push_pila_arbol(ListaArgumentos(None,None))
+                list_args = ListaArgumentos(None,None)
+                list_args.derecha = None
+                list_args.izquierda = None
+                self.push_pila_arbol(list_args)
             else:
                 for i in range(elementos[self.regla]*2):
                     if  i == 1:
@@ -614,7 +776,10 @@ class Arbol():
                         self.expresion1 = self.pop_pila_arbol()
                     pila.pop()
                     pila_codigo.pop()
-                self.push_pila_arbol(ListaArgumentos(self.expresion1,self.lista_argumentos))
+                list_args = ListaArgumentos(self.expresion1,self.lista_argumentos)
+                list_args.derecha = self.lista_argumentos
+                list_args.izquierda = self.expresion1
+                self.push_pila_arbol(list_args)
 
         else:
             for i in range(elementos[self.regla]*2):

@@ -1,7 +1,9 @@
 from pila import Pila as pila
 from Lexico import Lexico as lexico
+from Arbol import Arbol as trees
 import numpy as np
 
+tree = trees()
 class TablaLR:
     def __init__(self):
         self.aceptacion = False
@@ -14,6 +16,8 @@ class TablaLR:
         self.reglas = []
         self.numero_elementos = []
         self.numero_regla = []
+        self.codigo = []
+        self.arbol = []
 
     def regresa_tipo(self,simbolo):
 
@@ -114,8 +118,6 @@ class TablaLR:
         elif simbolo == 'Expresion':
             return 45
 
-
-
     def inicializar_reglas(self):
         archivo = open("reglas.txt","r")
         cadena = archivo.read()
@@ -147,9 +149,10 @@ class TablaLR:
             for j in range(int(columnas)):
                 self.tabla[i,j]=int(col[j])
 
-    def recorrer_entrada(self,cadena,tipos,pila):
+    def recorrer_entrada(self,cadena,tipos,pila,pila_codigo):
         self.inicializar_reglas()
         self.cargar_tabla()
+        pila_codigo.push
         while self.aceptacion == False:
             print("CADENA " + str(cadena[self.contador]))
             self.fila = self.regresa_tipo(pila.top())
@@ -158,45 +161,60 @@ class TablaLR:
             self.accion = self.tabla[self.fila, self.columna]
             print("Fila: " + str(self.fila)   + " pila_top: " + str(pila.top()))
             print("Columna: " + str(self.columna)   + " tipos__:   " + str(tipos[self.contador]))
-            print("Accion: " + str(self.accion))
+            #print("Accion: " + str(self.accion))
 
             if self.accion == -1:
+                print("Accion: " + str(self.accion))
                 print("Cadena aceptada")
                 self.aceptacion = True
                 break
             if self.accion > 0:
+                print("Accion: " + str(self.accion))
                 pila.push(tipos[self.contador])
                 pila.push(int(self.accion))
+                ######################################################
+                pila_codigo.push(str(cadena[self.contador]))
+                pila_codigo.push(int(self.accion))
+                ######################################################
                 self.contador = self.contador+1
                 pila.muestra()
                 print("\n----------------\n\n")
             elif self.accion < 0:
                 self.accion = -self.accion
                 self.accion = self.accion-1
-                print(self.accion)
-                print(len(self.numero_elementos))
+                print("Accion negativa: " + str(self.accion))
+                #print(self.accion)
+                #print(len(self.numero_elementos))
 
-                #var = self.numero_elementos[int(self.accion)]
-                #print(var)
-                for i in range(self.numero_elementos[int(self.accion)-1]*2):
-                    print("Elem " + str(i) + " " + str(pila.top()))
-                    pila.pop()
+                tree.forma_arbol(pila,pila_codigo,self.numero_elementos,self.accion)
+                #if self.reglas[int(self.accion)-1] not in self.arbol:
+                self.arbol.append(self.reglas[int(self.accion)-1])
+                #for i in range(self.numero_elementos[int(self.accion)-1]*2):
+                #    pila.pop()
 
-
+                self.accion = int(self.accion)
 
                 self.fila = pila.top()
-                print("Fila" + str(self.fila))
+                #print("Fila" + str(self.fila))
                 self.accion = int(self.accion)
                 pila.push(self.reglas[self.accion-1])
-                print("Columna: " + str(self.regresa_tipo(pila.top())))
+                ######################################################
+                pila_codigo.push(self.reglas[self.accion-1])
+                ######################################################
+                #print("Columna: " + str(self.regresa_tipo(pila.top())))
                 self.columna = pila.top()
-                print("----- " + str(self.regresa_tipo(self.columna)))
+                #print("----- " + str(self.regresa_tipo(self.columna)))
                 self.accion = self.tabla[self.fila, self.regresa_tipo(self.columna)]
-                print("Accion" + str(self.accion))
+                #print("Accion" + str(self.accion))
                 pila.push(int(self.accion))
+                ######################################################
+                pila_codigo.push(int(self.accion))
+                ######################################################
                 #print("Hi- ": + str(self.reglas[int(self.accion)]))
                 #pila.push(self.reglas[int(self.accion)])
                 #pila.push(int(self.accion))
+                pila.muestra()
+                print("\n----------------\n\n")
             else:
                 print("Cadena no valida")
                 self.aceptacion = True
@@ -204,6 +222,7 @@ class TablaLR:
 
 LR = TablaLR()
 p = pila()
+p_codigo = pila()
 lex = lexico
 
 def main():
@@ -211,7 +230,24 @@ def main():
     tipo_entrada = lex.tipos
     p.push('$')
     p.push(0)
-    LR.recorrer_entrada(entrada,tipo_entrada,p)
+    p_codigo.push('$')
+    p_codigo.push(0)
+    LR.recorrer_entrada(entrada,tipo_entrada,p,p_codigo)
+    print("")
+    #print(tree.lista_arbol)
+    #print(tree.lista_arbol[0].definiciones.definicion.def_funcion.bloque_funcion.def_locales.def_local.sentencia.expresion.expresion2.termino.elemento)
+    #print(tree.lista_arbol[0].definiciones.definicion.def_funcion.bloque_funcion.def_locales.def_local.sentencia.sentencia_bloque.bloque.sentencias.sentencia.expresion.termino.elemento)
+    #print(tree.lista_arbol[0].definiciones.definicion.def_funcion.parametros.identificador)
+    #print(tree.lista_arbol[0].derecha.izquierda.derecha.derecha)
+    tree.postorden(tree.lista_arbol[0])
+    #print(tree.lista_arbol[0].definiciones.definiciones.def_funcion.parametros.lista_parametros)
+    print("")
+    print("")
+    print("")
+
+    #for i in range(len(LR.arbol)):
+    #    print(LR.arbol[len(LR.arbol)-1-i])
+    print(LR.arbol)
 
 
 if __name__ == '__main__':
