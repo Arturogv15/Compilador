@@ -1,3 +1,6 @@
+from Semantico import Semantico as semantico
+
+
 PROGRAMA = 0                                #
 DEFINICIONES_V = 1                          #
 DEFINICIONES = 2                            #
@@ -204,6 +207,7 @@ class Parametros(Node):
         self.tipo = tipo
         self.identificador = identificador
         self.lista_parametros = ListaParam
+        self.funcion = None
 
 class ListaParam(Node):
     def __init__(self,tipo,identificador,ListaParam):
@@ -231,7 +235,7 @@ class Programa(Node):
         self.definiciones = Definiciones
 
 
-
+semantico = semantico()
 class Arbol():
     def __init__(self):
         self.lista_arbol = []
@@ -253,6 +257,8 @@ class Arbol():
         self.lista_argumentos = ""
         self.variable = ""
         self.argumentos = ""
+        self.bandera = False
+        self.valido = False
 
     def push_pila_arbol(self,elemento):
         self.lista_arbol.append(elemento)
@@ -263,10 +269,16 @@ class Arbol():
         if arbol != None:
             self.postorden(arbol.izquierda)
             self.postorden(arbol.derecha)
-            print(arbol.__dict__)
-            #print("Raiz:   " + str(arbol))
+            print('')
+            print("Raiz:   " + str(arbol))
             #print("Izq:    " + str(arbol.izquierda))
             #print("Der:    " + str(arbol.derecha))
+            elem = str(type(arbol)).split('.')
+            elemento = elem[1].split('\'')[0]
+            print(elemento)
+            #print(arbol.__dict__)
+            semantico.analiza(elemento,arbol)
+
             print("\n")
 
     def forma_arbol(self,pila,pila_codigo,elementos,accion):
@@ -329,6 +341,7 @@ class Arbol():
                 pila_codigo.pop()
             bloque_fun = self.pop_pila_arbol()
             param = self.pop_pila_arbol()
+            param.funcion = self.id
             def_fun = DefFun(param,bloque_fun,self.tipo,self.id)
             def_fun.izquierda = param
             def_fun.derecha = bloque_fun

@@ -240,6 +240,11 @@ def main():
     #print(tree.lista_arbol[0].definiciones.definicion.def_funcion.parametros.identificador)
     #print(tree.lista_arbol[0].derecha.izquierda.derecha.derecha)
     tree.postorden(tree.lista_arbol[0])
+    if tree.lista_arbol[0].valido == False:
+        print('Semanticamente no es correcto')
+    else:
+        print('Semanticamente es correcto')
+
     #print(tree.lista_arbol[0].definiciones.definiciones.def_funcion.parametros.lista_parametros)
     print("")
     print("")
@@ -247,7 +252,7 @@ def main():
 
     #for i in range(len(LR.arbol)):
     #    print(LR.arbol[len(LR.arbol)-1-i])
-    print(LR.arbol)
+    #print(LR.arbol)
 
 
 if __name__ == '__main__':
