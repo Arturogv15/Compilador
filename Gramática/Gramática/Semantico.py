@@ -17,8 +17,6 @@ class Semantico:
         self.bandera = False
 
     def busca_simbolo(self,simbolo,tipodato,tipo,funcion=None):
-
-
         if len(self.tabla_simbolos) == 0:
             return False
         else:
@@ -55,9 +53,6 @@ class Semantico:
                         #print(self.tabla_simbolos[i].tipo, self.tabla_simbolos[i].funcion, self.tabla_simbolos[i].nombre)
                         if self.tabla_simbolos[i].tipo == 'variable' or self.tabla_simbolos[i].tipo == 'parametro':
                             if  self.tabla_simbolos[i].funcion == funcion and self.tabla_simbolos[i].nombre == simbolo:
-                                print(self.tabla_simbolos[i].funcion,funcion)
-                                print(self.tabla_simbolos[i].nombre,simbolo)
-                                print(self.tabla_simbolos[i].tipo_dato,tipodato)
                                 if self.tabla_simbolos[i].tipo_dato == tipodato:
                                     return True
                     return False
@@ -112,7 +107,7 @@ class Semantico:
 
         elif elemento == 'DefVar':
             self.bandera = False
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             id = arbol.identificador
             tipo = arbol.tipo
             funcion = arbol.funcion
@@ -156,7 +151,7 @@ class Semantico:
                 return True
 
         elif elemento == 'DefFun':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             obj = Semantico()
             id = arbol.identificador
             tipo = arbol.tipo
@@ -169,7 +164,7 @@ class Semantico:
             else:
                 arbol.valido = False
 
-            print(arbol.valido)
+            #print(arbol.valido)
             if arbol.izquierda.valido == True and arbol.valido == True and arbol.derecha.valido:
             #if arbol.izquierda.valido == True and arbol.valido == True:
                 arbol.valido = True
@@ -220,14 +215,14 @@ class Semantico:
                     arbol = arbol.derecha
                     arbol.valido = False
 
-            print(self.bandera)
+            #print(self.bandera)
             if self.bandera == True or nuevo_arbol.valido == False:
                 return False
             else:
                 return True
 
         elif elemento == 'BloqueFuncion':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             #arbol.valido = True
             if arbol.derecha.valido == True:
                 arbol.valido = True
@@ -235,7 +230,7 @@ class Semantico:
                 arbol.valido = False
 
         elif elemento == 'DefLocales':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             arbol.valido = True
             if arbol.derecha == None and arbol.izquierda == None:    #Esta vacio el nodo
                 arbol.valido = True
@@ -298,24 +293,24 @@ class Semantico:
                     else:
                         arbol = arbol.derecha
                         arbol.valido = False
-                    print(arbol.valido)
+                    #print(arbol.valido)
 
-            print("BANDERA " + str(self.bandera))
+            #print("BANDERA " + str(self.bandera))
             if self.bandera == True or arbol_nuevo.valido == False:
                 return False
             else:
                 return True
-            print(arbol.valido)
+            #print(arbol.valido)
 
         elif elemento == 'DefLocal_S':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             if arbol.derecha.valido == True:
                 arbol.valido = True
             else:
                 arbol.valido = False
 
         elif elemento == 'Sentencia_return':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             if arbol.derecha.valido == True:
                 arbol.valido = True
             else:
@@ -345,11 +340,11 @@ class Semantico:
                 else:
                     arbol.valido = False
 
-            print(arbol.valido)
+            #print(arbol.valido)
 
         elif elemento == 'Sentencia_while':
             #arbol.valido = True
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             if arbol.derecha.valido == True and arbol.izquierda.valido == True:
                 arbol.valido = True
             else:
@@ -367,24 +362,24 @@ class Semantico:
                 arbol.valido = False
 
         elif elemento == 'SentenciaBloque_B':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             #arbol.valido = True
-            print(arbol.derecha.valido)
+            #print(arbol.derecha.valido)
             if arbol.derecha.valido == True:
                 arbol.valido = True
             else:
                 arbol.valido = False
 
         elif elemento == 'Bloque':
-            print(arbol.__dict__)
-            print(arbol.derecha.valido)
+            #print(arbol.__dict__)
+            #print(arbol.derecha.valido)
             if arbol.derecha.valido == True:
                 arbol.valido = True
             else:
                 arbol.valido = False
 
         elif elemento == 'Sentencias':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             #arbol.valido = True
             if arbol.derecha == None and arbol.izquierda == None:
                 arbol.valido = True
@@ -392,14 +387,14 @@ class Semantico:
                 if arbol.izquierda.valido == True:
                     arbol.valido = True
             else:
-                print(arbol.derecha.valido, arbol.izquierda.valido)
+                #print(arbol.derecha.valido, arbol.izquierda.valido)
                 if arbol.derecha.valido == True and arbol.izquierda.valido == True:
                     arbol.valido = True
                 else:
                     arbol.valido = False
 
         elif elemento == 'SentenciaBloque_S':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             #arbol.valido = True
             if arbol.derecha.valido == True:
                 arbol.valido = True
@@ -407,7 +402,7 @@ class Semantico:
                 arbol.valido = False
 
         elif elemento == 'Sentencia_llamada':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             if arbol.derecha.valido == True:
                 arbol.valido = True
             else:
@@ -416,10 +411,10 @@ class Semantico:
 
         elif elemento == 'LlamadaFuncion':
             arbol.valido = True
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
 
         elif elemento == 'Otro':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             if arbol.derecha == None:
                 arbol.valido = True
             else:
@@ -430,7 +425,7 @@ class Semantico:
 
         elif elemento == 'Expresion_doble':
             #arbol.valido = True
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             if arbol.izquierda.valido == True and arbol.derecha.valido == True:
                 #print(arbol.izquierda.tipo_elemento, arbol.derecha.tipo_elemento)
                 if arbol.izquierda.tipo_elemento == arbol.derecha.tipo_elemento:
@@ -452,19 +447,19 @@ class Semantico:
             else:
                 arbol.valido = False
                 arbol.tipo_elemento = 'error'
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
 
         elif elemento == 'Termino_entero':
             if arbol.elemento != None:
                 arbol.valido = True
                 arbol.tipo_elemento = 'int'
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
 
         elif elemento == 'Termino_cadena':
             if arbol.elemento != None:
                 arbol.valido = True
                 arbol.tipo_elemento = 'cadena'
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
 
         elif elemento == 'Termino_id':
             arbol.valido = True
@@ -474,16 +469,16 @@ class Semantico:
             else:
                 arbol.valido = True
                 arbol.tipo_elemento = result['tipo']
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
 
         elif elemento == 'Termino_real':
             if arbol.elemento != None:
                 arbol.valido = True
                 arbol.tipo_elemento = 'float'
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
 
         elif elemento == 'Expresion':
-            print(arbol.__dict__)
+            #print(arbol.__dict__)
             if arbol.derecha.valido == True:
                 arbol.valido = True
                 arbol.tipo_elemento = arbol.derecha.tipo_elemento

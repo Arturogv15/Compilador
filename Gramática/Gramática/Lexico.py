@@ -75,6 +75,7 @@ class Lexico:
     cadena = archivo.read()
     archivo.close()
     caracterNoValido = False
+    correcto = False
 
     def sel_tipo(self):
         if self.simbolo == 'if':
@@ -121,10 +122,10 @@ class Lexico:
 
     def sig_simbolo(self):
         print("\n")
-        print("CADENA: " + self.cadena)
+        print("PROGRAMA: " + self.cadena)
         while(self.cont <= len(self.cadena)):
             if self.cont>0:
-                print("SIMBOLO: " + self.simbolo + "      \t\t\tTIPO: " + tipo_simbolo(self.estado))
+                #print("SIMBOLO: " + self.simbolo + "      \t\t\tTIPO: " + tipo_simbolo(self.estado))
                 self.simbolos.append(self.simbolo)
                 self.tipos.append(tipo_simbolo(self.estado))
 
@@ -262,7 +263,10 @@ class Lexico:
                     self.continuar = False
                     self.estado = -1
 
-        print("\n\n")
+        #print("\n\n")
         self.simbolos.append('$')
         self.tipos.append('$')
-        return self.simbolos
+        if "Error" in self.tipos:
+            return False
+        else:
+            return True

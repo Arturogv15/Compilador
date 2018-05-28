@@ -272,7 +272,7 @@ class Arbol():
 
     def post_orden_if(self,arbol,nombre_funcion):
         if arbol != None:
-            print(type(arbol))
+            #print(type(arbol))
             if str(type(arbol)) != '<class \'str\'>':
                 elem = str(type(arbol)).split('.')
                 elemento = elem[1].split('\'')[0]
@@ -301,7 +301,7 @@ class Arbol():
                         arbol.valido = True
                 else:
                     semantico.analiza(elemento,arbol)
-                print("\n")
+                #print("\n")
 
     def imprime(self):
         for i in range(len(semantico.tabla_simbolos)):
@@ -410,7 +410,7 @@ class Arbol():
                     pila_codigo.pop()
 
                 def_locales = DefLocales(self.def_local,self.def_locales)
-                print("////////////////////////////////////// " + str(def_locales.__dict__))
+                #print("////////////////////////////////////// " + str(def_locales.__dict__))
                 def_locales.derecha = self.def_locales
                 def_locales.izquierda = self.def_local
                 self.push_pila_arbol(def_locales)
