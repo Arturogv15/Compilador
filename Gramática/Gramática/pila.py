@@ -9,8 +9,10 @@ class Pila():
         return self.pila.pop()
 
     def muestra(self):
+        cadena = ""
         for i in range(len(self.pila)):
-                print(self.pila[i])
+            cadena += " | " + str(self.pila[i])
+        print(cadena)
 
     def top(self):
         return self.pila[len(self.pila)-1]

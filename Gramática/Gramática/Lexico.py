@@ -166,6 +166,8 @@ class Lexico:
                         self.sig_estado(self,OP_AND)
                     elif self.caracter == '|':
                         self.sig_estado(self, OP_OR)
+                    elif self.caracter == '\'':
+                        self.sig_estado(self, CADENA)
                     elif self.caracter.isalpha() or self.caracter == '_':
                         self.sig_estado(self,IDENTIFICADOR)
                     elif self.caracter.isdigit():
@@ -241,6 +243,21 @@ class Lexico:
                         if self.caracter == "":
                             self.simbolo = self.guarda_simbolo
                         self.guarda_simbolo = ""
+                elif self.estado == CADENA:
+                    validaCadena = False
+                    cadenaConcatenar = ""
+                    for i in range(self.cont-1,len(self.cadena)):
+                        x = self.sig_caracter(self,self.cadena)
+                        cadenaConcatenar = cadenaConcatenar + self.cadena[i]
+                        if x == '\'':
+                            validaCadena = True
+                            break
+                    if validaCadena == True:
+                        self.simbolo = self.simbolo + cadenaConcatenar + '\''
+                        self.caracter = ""
+                        self.aceptacion(self,CADENA)
+                    else:
+                        self.sig_estado(self,ERROR)
                 else:
                     self.continuar = False
                     self.estado = -1

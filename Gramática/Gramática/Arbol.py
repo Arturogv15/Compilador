@@ -60,6 +60,8 @@ class Node():
         self.izquierda = None
         self.derecha = None
         self.centro = None
+        self.funcion = None
+        self.tipo_elemento = None
 
 class Expresion_doble(Node):
     def __init__(self,Expresion1,Expresion2):
@@ -177,10 +179,12 @@ class DefLocales(Node):
         self.vacio = None
         self.def_local = DefLocal
         self.def_locales = DefLocales
+        self.funcion = None
 
 class BloqueFuncion(Node):
     def __init__(self,DefLocales):
         self.def_locales = DefLocales
+        self.funcion = None
 
 class DefFun(Node):
     def __init__(self,Parametros,BloqueFuncion,tipo,identificador):
@@ -194,9 +198,10 @@ class DefVar(Node):
         self.tipo = tipo
         self.identificador = identificador
         self.lista_variables = ListaVar
+        self.funcion = None
 
 class ListaVar(Node):
-    def __init__(self,indetificador,ListaVar):
+    def __init__(self,identificador,ListaVar):
         self.vacio = None
         self.identificador = identificador
         self.ListaVar = ListaVar
@@ -265,21 +270,44 @@ class Arbol():
     def pop_pila_arbol(self):
         return self.lista_arbol.pop()
 
+    def post_orden_if(self,arbol,nombre_funcion):
+        if arbol != None:
+            print(type(arbol))
+            if str(type(arbol)) != '<class \'str\'>':
+                elem = str(type(arbol)).split('.')
+                elemento = elem[1].split('\'')[0]
+                self.post_orden_if(arbol.izquierda,nombre_funcion)
+                self.post_orden_if(arbol.derecha,nombre_funcion)
+                if elemento == 'Sentencia_if':
+                    self.post_orden_if(arbol.centro,nombre_funcion)
+                arbol.funcion = nombre_funcion
+            #print("ARBOL......................................" + str(arbol.__dict__), str(arbol))
+
     def postorden(self,arbol):
         if arbol != None:
-            self.postorden(arbol.izquierda)
-            self.postorden(arbol.derecha)
-            print('')
-            print("Raiz:   " + str(arbol))
-            #print("Izq:    " + str(arbol.izquierda))
-            #print("Der:    " + str(arbol.derecha))
-            elem = str(type(arbol)).split('.')
-            elemento = elem[1].split('\'')[0]
-            print(elemento)
-            #print(arbol.__dict__)
-            semantico.analiza(elemento,arbol)
+            if str(type(arbol)) != '<class \'str\'>':
+                elem = str(type(arbol)).split('.')
+                elemento = elem[1].split('\'')[0]
+                self.postorden(arbol.izquierda)
+                self.postorden(arbol.derecha)
+                #print("\nRaiz:   " + str(arbol))
+                if elemento == 'Sentencia_if':
+                    self.postorden(arbol.centro)
+                print(elemento)
+                if elemento == 'Parametros' or elemento == 'DefVar' or elemento == 'DefLocal_V':
+                    if semantico.analiza(elemento,arbol) == False:
+                        arbol.valido = False
+                    else:
+                        arbol.valido = True
+                else:
+                    semantico.analiza(elemento,arbol)
+                print("\n")
 
-            print("\n")
+    def imprime(self):
+        for i in range(len(semantico.tabla_simbolos)):
+            print(semantico.tabla_simbolos[i].tipo_dato, semantico.tabla_simbolos[i].nombre, semantico.tabla_simbolos[i].tipo, semantico.tabla_simbolos[i].funcion)
+
+
 
     def forma_arbol(self,pila,pila_codigo,elementos,accion):
         self.regla = int(accion)-1
@@ -326,6 +354,7 @@ class Arbol():
                 pila.pop()
                 pila_codigo.pop()
             pop_pila = self.pop_pila_arbol()
+            pop_pila.funcion = None
             _definicion = Definicion_Var(pop_pila)
             _definicion.izquierda = pop_pila
             _definicion.derecha = None
@@ -342,15 +371,22 @@ class Arbol():
             bloque_fun = self.pop_pila_arbol()
             param = self.pop_pila_arbol()
             param.funcion = self.id
+            bloque_fun.funcion = self.id
             def_fun = DefFun(param,bloque_fun,self.tipo,self.id)
             def_fun.izquierda = param
             def_fun.derecha = bloque_fun
+            self.post_orden_if(def_fun.derecha,self.id)
+            def_fun.derecha.derecha.izquierda.funcion = self.id
+            #print('********************** ' + str(def_fun.derecha.derecha.izquierda.__dict__))
+            #def_fun.derecha.derecha.izquierda.funcion = self.id    #Deflocal_s
+            #def_fun.derecha.derecha.derecha.funcion = self.id      #Deflocales
             self.push_pila_arbol(def_fun)
 
         elif self.regla == BLOQFUNC:
             for i in range(elementos[self.regla]*2):
                 if i == 3:
                      def_locales = self.pop_pila_arbol()
+                     #print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRR" + str(def_locales.__dict__))
                      bloque_fun = BloqueFuncion(def_locales)
                      bloque_fun.derecha = def_locales
                      bloque_fun.izquierda = None
@@ -372,7 +408,9 @@ class Arbol():
                         self.def_local = self.pop_pila_arbol()
                     pila.pop()
                     pila_codigo.pop()
+
                 def_locales = DefLocales(self.def_local,self.def_locales)
+                print("////////////////////////////////////// " + str(def_locales.__dict__))
                 def_locales.derecha = self.def_locales
                 def_locales.izquierda = self.def_local
                 self.push_pila_arbol(def_locales)
@@ -737,7 +775,6 @@ class Arbol():
                 lista_var.derecha = self.lista_variables
                 lista_var.izquierda = None
                 self.push_pila_arbol(lista_var)
-
 
         elif self.regla == VALORREGRESA or self.regla == VALORREGRESA_V:
             if self.regla == VALORREGRESA_V:

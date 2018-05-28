@@ -234,17 +234,13 @@ def main():
     p_codigo.push(0)
     LR.recorrer_entrada(entrada,tipo_entrada,p,p_codigo)
     print("")
-    #print(tree.lista_arbol)
-    #print(tree.lista_arbol[0].definiciones.definicion.def_funcion.bloque_funcion.def_locales.def_local.sentencia.expresion.expresion2.termino.elemento)
-    #print(tree.lista_arbol[0].definiciones.definicion.def_funcion.bloque_funcion.def_locales.def_local.sentencia.sentencia_bloque.bloque.sentencias.sentencia.expresion.termino.elemento)
-    #print(tree.lista_arbol[0].definiciones.definicion.def_funcion.parametros.identificador)
-    #print(tree.lista_arbol[0].derecha.izquierda.derecha.derecha)
     tree.postorden(tree.lista_arbol[0])
     if tree.lista_arbol[0].valido == False:
         print('Semanticamente no es correcto')
     else:
         print('Semanticamente es correcto')
 
+    tree.imprime()
     #print(tree.lista_arbol[0].definiciones.definiciones.def_funcion.parametros.lista_parametros)
     print("")
     print("")
