@@ -1,0 +1,14 @@
+
+float r, x;
+
+int fun(int x,float y){
+float g,m;
+int h;
+h=(h+5+(+(x-5+5)));
+if(g<=m){
+while(h<x)
+{
+x=x+5;
+}
+}
+}
